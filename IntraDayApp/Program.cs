@@ -1,4 +1,5 @@
 using IntraDayApp;
+using IntraDayApp.Remote;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.EventLog;
 
@@ -12,7 +13,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
         LoggerProviderOptions.RegisterProviderOptions<
             EventLogSettings, EventLogLoggerProvider>(services);
 
-        services.AddSingleton<TestService>();
+        services.AddSingleton<PowerServiceWrapper, PowerServiceWrapperImpl>();
         services.AddHostedService<WindowsBackgroundService>();
     })
     .ConfigureLogging((context, logging) =>

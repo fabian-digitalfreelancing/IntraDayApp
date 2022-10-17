@@ -5,6 +5,16 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp", "IntraDayApp\IntraDayApp.csproj", "{FB230021-F6EE-4A5D-8204-043CBE984EB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp.Remote", "IntraDayApp.Remote\IntraDayApp.Remote.csproj", "{3734DDCD-2FFF-4E38-819D-A0D6FC1DDFA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A542C3E6-574A-4917-80CF-DC993BD37C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp.Remote.Tests", "IntraDayApp.Remote.Tests\IntraDayApp.Remote.Tests.csproj", "{297ECAA9-ED18-45F0-B646-DC651C103821}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp.Domain", "IntraDayApp.Domain\IntraDayApp.Domain.csproj", "{227367E6-DC60-4C2B-940F-720410FFB81E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp.Service", "IntraDayApp.Service\IntraDayApp.Service.csproj", "{A1EC85BA-512B-40A3-9972-94C198D15919}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +25,28 @@ Global
 		{FB230021-F6EE-4A5D-8204-043CBE984EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB230021-F6EE-4A5D-8204-043CBE984EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB230021-F6EE-4A5D-8204-043CBE984EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3734DDCD-2FFF-4E38-819D-A0D6FC1DDFA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3734DDCD-2FFF-4E38-819D-A0D6FC1DDFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3734DDCD-2FFF-4E38-819D-A0D6FC1DDFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3734DDCD-2FFF-4E38-819D-A0D6FC1DDFA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{297ECAA9-ED18-45F0-B646-DC651C103821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{297ECAA9-ED18-45F0-B646-DC651C103821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{297ECAA9-ED18-45F0-B646-DC651C103821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{297ECAA9-ED18-45F0-B646-DC651C103821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227367E6-DC60-4C2B-940F-720410FFB81E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227367E6-DC60-4C2B-940F-720410FFB81E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227367E6-DC60-4C2B-940F-720410FFB81E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227367E6-DC60-4C2B-940F-720410FFB81E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1EC85BA-512B-40A3-9972-94C198D15919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1EC85BA-512B-40A3-9972-94C198D15919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1EC85BA-512B-40A3-9972-94C198D15919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1EC85BA-512B-40A3-9972-94C198D15919}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{297ECAA9-ED18-45F0-B646-DC651C103821} = {A542C3E6-574A-4917-80CF-DC993BD37C07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C10765C5-FCAD-462B-8A43-308027ADA07A}
