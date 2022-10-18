@@ -13,8 +13,9 @@ using IHost host = Host.CreateDefaultBuilder(args)
         LoggerProviderOptions.RegisterProviderOptions<
             EventLogSettings, EventLogLoggerProvider>(services);
 
-        services.AddSingleton<PowerServiceWrapper, PowerServiceWrapperImpl>();
+        services.AddPowerServices();
         services.AddHostedService<WindowsBackgroundService>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     })
     .ConfigureLogging((context, logging) =>
     {

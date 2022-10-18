@@ -1,9 +1,9 @@
-﻿using IntraDayApp.Domain.Models;
+﻿using IntraDayApp.Domain.Responses;
 
 namespace IntraDayApp.Remote
 {
     public interface PowerServiceWrapper
     {
-        Task<IEnumerable<Trade>> GetTradesAsync(DateTime date);
+        Task<PowerServiceGetTradesResponse> GetTradesAsync(DateTime date);
     }
 }
