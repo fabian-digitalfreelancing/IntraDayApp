@@ -20,5 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IntraDayApp.Remote\IntraDayApp.Remote.csproj" />
+    <ProjectReference Include="..\IntraDayApp.Service\IntraDayApp.Service.csproj" />
   </ItemGroup>
 </Project>

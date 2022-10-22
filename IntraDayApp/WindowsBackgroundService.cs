@@ -1,29 +1,33 @@
-using IntraDayApp.Remote;
+using IntraDayApp.Domain.AppSettings;
+using IntraDayApp.Service;
+using Microsoft.Extensions.Options;
 
 namespace IntraDayApp
 {
     public sealed class WindowsBackgroundService : BackgroundService
     {
-        private readonly PowerServiceWrapper _service;
+        private readonly IntraDayReportFacade _reportFacade;
         private readonly ILogger<WindowsBackgroundService> _logger;
+        private readonly IOptions<ReportSettings> _options;
+        private readonly WorkerHelper _workerHelper;
 
         public WindowsBackgroundService(
-            PowerServiceWrapper service,
-            ILogger<WindowsBackgroundService> logger) =>
-            (_service, _logger) = (service, logger);
+            IntraDayReportFacade reportFacade,
+            ILogger<WindowsBackgroundService> logger,
+            IOptions<ReportSettings> options,
+            WorkerHelper workerHelper) =>
+            (_reportFacade, _logger, _options, _workerHelper) = (reportFacade, logger, options, workerHelper);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation($"IntraDayApp Starting, new report to be saved every {_options.Value.Frequency} minute(s) to {_options.Value.Location}");
             try
             {
-                var result = await _service.GetTradesAsync(new DateTime(2022, 1, 1));
-                //while (!stoppingToken.IsCancellationRequested)
-                //{
-                //    string result = _service.GetTest();
-                //    _logger.LogWarning("{result}", result);
-
-                //    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-                //}
+                while (!await _workerHelper.StartTimer(TimeSpan.FromMinutes(_options.Value.Frequency), stoppingToken))
+                {
+                    await _reportFacade.CreateCsvIntraDayReportAsync(_options.Value.Location);
+                    await _workerHelper.DelayForMinutes(_options.Value.Frequency, stoppingToken);
+                }
 
             }
             catch (Exception ex)

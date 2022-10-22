@@ -1,5 +1,7 @@
 using IntraDayApp;
+using IntraDayApp.Domain.AppSettings;
 using IntraDayApp.Remote;
+using IntraDayApp.Service;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.EventLog;
 
@@ -8,14 +10,18 @@ using IHost host = Host.CreateDefaultBuilder(args)
     {
         options.ServiceName = "Intra Day Report Service";
     })
-    .ConfigureServices(services =>
+    .ConfigureServices((hostContext, services) =>
     {
         LoggerProviderOptions.RegisterProviderOptions<
             EventLogSettings, EventLogLoggerProvider>(services);
 
         services.AddPowerServices();
+        services.AddServices();
         services.AddHostedService<WindowsBackgroundService>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        IConfiguration configuration = hostContext.Configuration;
+        services.Configure<ReportSettings>(configuration.GetSection(nameof(ReportSettings)));
     })
     .ConfigureLogging((context, logging) =>
     {

@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntraDayApp.Domain", "Intra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntraDayApp.Service", "IntraDayApp.Service\IntraDayApp.Service.csproj", "{A1EC85BA-512B-40A3-9972-94C198D15919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayApp.Service.Tests", "IntraDayApp.Services.Tests\IntraDayApp.Service.Tests.csproj", "{A9265E23-855F-4CB5-ACFE-68E91FD83BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntraDayApp.Service.Tests", "IntraDayApp.Services.Tests\IntraDayApp.Service.Tests.csproj", "{A9265E23-855F-4CB5-ACFE-68E91FD83BC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntraDayAppTests", "IntraDayAppTests\IntraDayAppTests.csproj", "{3D4669D7-394A-418D-8C27-B1189620814F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{A9265E23-855F-4CB5-ACFE-68E91FD83BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9265E23-855F-4CB5-ACFE-68E91FD83BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9265E23-855F-4CB5-ACFE-68E91FD83BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D4669D7-394A-418D-8C27-B1189620814F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D4669D7-394A-418D-8C27-B1189620814F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D4669D7-394A-418D-8C27-B1189620814F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D4669D7-394A-418D-8C27-B1189620814F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{297ECAA9-ED18-45F0-B646-DC651C103821} = {A542C3E6-574A-4917-80CF-DC993BD37C07}
 		{A9265E23-855F-4CB5-ACFE-68E91FD83BC8} = {A542C3E6-574A-4917-80CF-DC993BD37C07}
+		{3D4669D7-394A-418D-8C27-B1189620814F} = {A542C3E6-574A-4917-80CF-DC993BD37C07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C10765C5-FCAD-462B-8A43-308027ADA07A}

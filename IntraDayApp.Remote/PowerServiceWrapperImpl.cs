@@ -42,7 +42,7 @@ namespace IntraDayApp.Remote
         }
         private PowerServiceGetTradesResponse LogAndGetErrorResponse(string message, Exception ex)
         {
-            _logger.LogError(message);
+            _logger.LogError(ex, message);
             return PowerServiceGetTradesResponse.ErrorResponse(ex);
         }
     }

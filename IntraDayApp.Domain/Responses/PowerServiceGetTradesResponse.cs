@@ -10,7 +10,8 @@ namespace IntraDayApp.Domain.Responses
             return new PowerServiceGetTradesResponse()
             {
                 Error = Error,
-                Status = ServiceResponseStatus.Error
+                Status = ServiceResponseStatus.Error,
+                Data = new List<Trade>()
             };
         }
 
