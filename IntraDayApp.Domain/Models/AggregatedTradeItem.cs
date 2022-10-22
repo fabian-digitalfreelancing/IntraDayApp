@@ -10,8 +10,7 @@
             AggregatedTradeItem tradeItem = obj as AggregatedTradeItem;
             if (tradeItem == null)
                 return false;
-            else
-                return this.LocalTime.Equals(tradeItem.LocalTime) && Volume.Equals(tradeItem.Volume);
+            return this.LocalTime.Equals(tradeItem.LocalTime) && Volume.Equals(tradeItem.Volume);
         }
     }
 }

@@ -1,5 +1,6 @@
 using IntraDayApp.Domain.AppSettings;
-using IntraDayApp.Service;
+using IntraDayApp.Domain.Interfaces.App;
+using IntraDayApp.Domain.Interfaces.Service;
 using Microsoft.Extensions.Options;
 
 namespace IntraDayApp
@@ -9,25 +10,26 @@ namespace IntraDayApp
         private readonly IntraDayReportFacade _reportFacade;
         private readonly ILogger<WindowsBackgroundService> _logger;
         private readonly IOptions<ReportSettings> _options;
-        private readonly WorkerHelper _workerHelper;
+        private readonly TimerWrapper _timer;
 
         public WindowsBackgroundService(
             IntraDayReportFacade reportFacade,
             ILogger<WindowsBackgroundService> logger,
             IOptions<ReportSettings> options,
-            WorkerHelper workerHelper) =>
-            (_reportFacade, _logger, _options, _workerHelper) = (reportFacade, logger, options, workerHelper);
+            TimerWrapper timer) =>
+            (_reportFacade, _logger, _options, _timer) = (reportFacade, logger, options, timer);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation($"IntraDayApp Starting, new report to be saved every {_options.Value.Frequency} minute(s) to {_options.Value.Location}");
+            _logger.LogInformation("IntraDayApp Starting");
             try
             {
-                while (!await _workerHelper.StartTimer(TimeSpan.FromMinutes(_options.Value.Frequency), stoppingToken))
+                _timer.Initialize(TimeSpan.FromMinutes(_options.Value.Frequency));
+                do
                 {
                     await _reportFacade.CreateCsvIntraDayReportAsync(_options.Value.Location);
-                    await _workerHelper.DelayForMinutes(_options.Value.Frequency, stoppingToken);
-                }
+                } while (await _timer.WaitForNextTickAsync(stoppingToken)
+                    && !stoppingToken.IsCancellationRequested);
 
             }
             catch (Exception ex)

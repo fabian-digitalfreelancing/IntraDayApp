@@ -8,6 +8,7 @@ using Moq;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IntraDayApp.Remote.Tests
@@ -16,10 +17,10 @@ namespace IntraDayApp.Remote.Tests
     public class PowerServiceWrapperTests
     {
         private readonly PowerServiceWrapperImpl _sut;
-        private readonly Mock<IPowerService> _powerService = new Mock<IPowerService>();
-        private readonly Mock<ILogger<PowerServiceWrapperImpl>> _logger = new Mock<ILogger<PowerServiceWrapperImpl>>();
-        private readonly Mock<IMapper> _mapper = new Mock<IMapper>();
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Mock<IPowerService> _powerService = new();
+        private readonly Mock<ILogger<PowerServiceWrapperImpl>> _logger = new();
+        private readonly Mock<IMapper> _mapper = new();
+        private readonly Fixture _fixture = new();
 
         public PowerServiceWrapperTests()
         {
@@ -41,7 +42,7 @@ namespace IntraDayApp.Remote.Tests
         {
 
             var serviceResult = _fixture.CreateMany<PowerTrade>();
-            var mappedResult = _fixture.CreateMany<Trade>();
+            var mappedResult = _fixture.CreateMany<Trade>().ToList();
             _mapper.Setup(x => x.Map<IEnumerable<Trade>>(serviceResult)).Returns(mappedResult);
             _powerService.Setup(x => x.GetTradesAsync(It.IsAny<DateTime>())).ReturnsAsync(serviceResult);
 
@@ -70,9 +71,9 @@ namespace IntraDayApp.Remote.Tests
             var date = _fixture.Create<DateTime>();
             _powerService.Setup(x => x.GetTradesAsync(date)).ThrowsAsync(serviceException);
 
-            var result = await _sut.GetTradesAsync(date);
+            await _sut.GetTradesAsync(date);
 
-            VerifyLoggerErrorCalledWithMessage($"Power Service GetTradesAsync error input:{date.ToUniversalTime()} message:{serviceException.Message}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"Power Service GetTradesAsync error input:{date.ToUniversalTime()} message:{serviceException.Message}");
         }
 
         [TestMethod]
@@ -83,9 +84,9 @@ namespace IntraDayApp.Remote.Tests
             _powerService.Setup(x => x.GetTradesAsync(It.IsAny<DateTime>())).ReturnsAsync(serviceResult);
             _mapper.Setup(x => x.Map<IEnumerable<Trade>>(serviceResult)).Throws(mapperException);
 
-            var result = await _sut.GetTradesAsync(It.IsAny<DateTime>());
+            await _sut.GetTradesAsync(It.IsAny<DateTime>());
 
-            VerifyLoggerErrorCalledWithMessage($"GetTradesAsync Mapping message:{mapperException.Message}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"GetTradesAsync Mapping message:{mapperException.Message}");
         }
 
         [TestMethod]
@@ -111,9 +112,9 @@ namespace IntraDayApp.Remote.Tests
             _powerService.Setup(x => x.GetTradesAsync(date)).ReturnsAsync(serviceResult);
             _mapper.Setup(x => x.Map<IEnumerable<Trade>>(serviceResult)).Throws(exception);
 
-            var result = await _sut.GetTradesAsync(date);
+            await _sut.GetTradesAsync(date);
 
-            VerifyLoggerErrorCalledWithMessage($"GetTradesAsync error input: {date.ToUniversalTime()} message: {exception.Message}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"GetTradesAsync error input: {date.ToUniversalTime()} message: {exception.Message}");
         }
 
         [TestMethod]
@@ -130,14 +131,14 @@ namespace IntraDayApp.Remote.Tests
             Assert.AreEqual(ServiceResponseStatus.Error, result.Status);
         }
 
-        private void VerifyLoggerErrorCalledWithMessage(string message, Moq.Times times)
+        private void VerifyLoggerErrorCalledWithMessage(string message)
         {
             _logger.Verify(logger => logger.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),
-                It.Is<It.IsAnyType>((@object, @type) =>
+                It.Is<It.IsAnyType>((@object, type) =>
                     @object.ToString() == message &&
-                    @type.Name == "FormattedLogValues"),
+                    type.Name == "FormattedLogValues"),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once());

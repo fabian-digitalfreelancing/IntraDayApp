@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IntraDayApp.Domain.Interfaces.Remote;
 using IntraDayApp.Domain.Models;
 using IntraDayApp.Domain.Responses;
 using Microsoft.Extensions.Logging;

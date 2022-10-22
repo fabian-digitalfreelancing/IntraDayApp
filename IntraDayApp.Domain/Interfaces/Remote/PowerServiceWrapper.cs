@@ -1,6 +1,6 @@
 ﻿using IntraDayApp.Domain.Responses;
 
-namespace IntraDayApp.Remote
+namespace IntraDayApp.Domain.Interfaces.Remote
 {
     public interface PowerServiceWrapper
     {

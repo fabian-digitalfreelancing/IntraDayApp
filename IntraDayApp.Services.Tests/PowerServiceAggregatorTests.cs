@@ -1,4 +1,3 @@
-using AutoFixture;
 using IntraDayApp.Domain.Enums;
 using IntraDayApp.Service;
 using IntraDayApp.Service.Tests;
@@ -14,8 +13,7 @@ namespace IntraDayApp.Services.Tests
     public class PowerServiceAggregatorTests
     {
         private readonly PowerServiceAggregatorImpl _sut;
-        private readonly Fixture _fixture = new Fixture();
-        private readonly Mock<ILogger<PowerServiceAggregatorImpl>> _logger = new Mock<ILogger<PowerServiceAggregatorImpl>>();
+        private readonly Mock<ILogger<PowerServiceAggregatorImpl>> _logger = new();
 
         public PowerServiceAggregatorTests()
         {
@@ -45,46 +43,45 @@ namespace IntraDayApp.Services.Tests
         }
 
         [TestMethod]
-        public void Aggregate_ShouldsReturnErrorResponseAndLogErrorOnNegativePeriods()
+        public void Aggregate_ShouldReturnErrorResponseAndLogErrorOnNegativePeriods()
         {
             var input = AggregatorTestData.TradeWithNegativePeriods;
-
             var result = _sut.Aggregate(input);
 
             Assert.AreEqual(ServiceResponseStatus.Error, result.Status);
-            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}");
         }
 
         [TestMethod]
-        public void Aggregate_ShouldsReturnErrorResponseAndLogErrorOnTooHighPeriods()
+        public void Aggregate_ShouldReturnErrorResponseAndLogErrorOnTooHighPeriods()
         {
             var input = AggregatorTestData.TradeWithTooHighPeriods;
 
             var result = _sut.Aggregate(input);
 
             Assert.AreEqual(ServiceResponseStatus.Error, result.Status);
-            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}");
         }
 
         [TestMethod]
-        public void Aggregate_ShouldsReturnErrorResponseAndLogErrorOnZeroValuePeriods()
+        public void Aggregate_ShouldReturnErrorResponseAndLogErrorOnZeroValuePeriods()
         {
             var input = AggregatorTestData.TradeWithZeroValuePeriods;
 
             var result = _sut.Aggregate(input);
 
             Assert.AreEqual(ServiceResponseStatus.Error, result.Status);
-            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}", Times.Once());
+            VerifyLoggerErrorCalledWithMessage($"GetTimeFromPeriod out of range error with period: {input.ToList()[0].Periods[0].Period}");
         }
 
-        private void VerifyLoggerErrorCalledWithMessage(string message, Moq.Times times)
+        private void VerifyLoggerErrorCalledWithMessage(string message)
         {
             _logger.Verify(logger => logger.Log(
                 It.Is<LogLevel>(logLevel => logLevel == LogLevel.Error),
                 It.Is<EventId>(eventId => eventId.Id == 0),
-                It.Is<It.IsAnyType>((@object, @type) =>
+                It.Is<It.IsAnyType>((@object, type) =>
                     @object.ToString() == message &&
-                    @type.Name == "FormattedLogValues"),
+                    type.Name == "FormattedLogValues"),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once());

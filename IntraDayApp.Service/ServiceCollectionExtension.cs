@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IntraDayApp.Domain.Interfaces.Service;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IntraDayApp.Service
 {
@@ -6,10 +7,12 @@ namespace IntraDayApp.Service
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<CsvCreator, CsvCreatorImpl>();
+            services.AddSingleton<ReportService, ReportServiceImpl>();
             services.AddSingleton<IntraDayReportFacade, IntraDayReportFacadeImpl>();
             services.AddSingleton<PowerServiceAggregator, PowerServiceAggregatorImpl>();
-            services.AddSingleton<WorkerHelper, WorkerHelperImpl>();
+            services.AddSingleton<CsvServiceWrapper, CsvServiceWrapperImpl>();
+            services.AddSingleton<TimeProvider, TimeProviderImpl>();
+
             return services;
         }
     }

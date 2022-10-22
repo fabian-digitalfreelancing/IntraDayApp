@@ -1,5 +1,5 @@
 ﻿
-namespace IntraDayApp.Service
+namespace IntraDayApp.Domain.Interfaces.Service
 {
     public interface IntraDayReportFacade
     {

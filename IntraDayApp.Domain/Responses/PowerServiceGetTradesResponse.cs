@@ -5,21 +5,21 @@ namespace IntraDayApp.Domain.Responses
 {
     public class PowerServiceGetTradesResponse : ServiceResponse<IEnumerable<Trade>>
     {
-        public static PowerServiceGetTradesResponse ErrorResponse(Exception Error)
+        public static PowerServiceGetTradesResponse ErrorResponse(Exception error)
         {
             return new PowerServiceGetTradesResponse()
             {
-                Error = Error,
+                Error = error,
                 Status = ServiceResponseStatus.Error,
                 Data = new List<Trade>()
             };
         }
 
-        public static PowerServiceGetTradesResponse SuccessResponse(IEnumerable<Trade> Data)
+        public static PowerServiceGetTradesResponse SuccessResponse(IEnumerable<Trade> data)
         {
             return new PowerServiceGetTradesResponse()
             {
-                Data = Data,
+                Data = data,
                 Status = ServiceResponseStatus.Success
             };
         }

@@ -1,7 +1,8 @@
 ﻿using AutoFixture;
+using IntraDayApp.Domain.Interfaces.Remote;
+using IntraDayApp.Domain.Interfaces.Service;
 using IntraDayApp.Domain.Models;
 using IntraDayApp.Domain.Responses;
-using IntraDayApp.Remote;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -15,12 +16,13 @@ namespace IntraDayApp.Service.Tests
     public class IntraDayReportFacadeTests
     {
         private readonly IntraDayReportFacadeImpl _sut;
-        private readonly Mock<PowerServiceWrapper> _powerService = new Mock<PowerServiceWrapper>();
-        private readonly Mock<PowerServiceAggregator> _aggregator = new Mock<PowerServiceAggregator>();
-        private readonly Mock<CsvCreator> _csvCreator = new Mock<CsvCreator>();
-        private readonly Mock<ILogger<IntraDayReportFacadeImpl>> _logger = new Mock<ILogger<IntraDayReportFacadeImpl>>();
+        private readonly Mock<PowerServiceWrapper> _powerService = new();
+        private readonly Mock<PowerServiceAggregator> _aggregator = new();
+        private readonly Mock<ReportService> _reportService = new();
+        private readonly Mock<TimeProvider> _timeProvider = new();
+        private readonly Mock<ILogger<IntraDayReportFacadeImpl>> _logger = new();
 
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = new();
 
         private readonly string fileLocation = "location.csv";
         private readonly IEnumerable<Trade> _trades;
@@ -33,6 +35,8 @@ namespace IntraDayApp.Service.Tests
         public IntraDayReportFacadeTests()
         {
             _trades = _fixture.CreateMany<Trade>();
+            _timeProvider.Setup(x => x.Now()).Returns(DateTime.Now);
+            _timeProvider.Setup(x => x.TodaysDate()).Returns(DateTime.Today.Date);
             _powerServiceSuccessResponse = PowerServiceGetTradesResponse.SuccessResponse(_trades);
             _powerServiceErrorResponse = PowerServiceGetTradesResponse.ErrorResponse(new Exception());
             _aggregatedTrades = _fixture.CreateMany<AggregatedTradeItem>();
@@ -40,15 +44,16 @@ namespace IntraDayApp.Service.Tests
             _aggregateTradesErrorResponse = AggregateTradesResponse.ErrorResponse(new Exception());
             _createReportSuccessResponse = CreateReportResponse.SuccessResponse(fileLocation);
 
-            _sut = new IntraDayReportFacadeImpl(_powerService.Object, _aggregator.Object, _csvCreator.Object, _logger.Object);
+            _sut = new IntraDayReportFacadeImpl(_powerService.Object, _aggregator.Object, _reportService.Object, _timeProvider.Object, _logger.Object);
         }
 
         [TestMethod]
         public async Task Create_ShouldCallPowerServiceWithTodaysDate()
         {
+
             _powerService.Setup(x => x.GetTradesAsync(DateTime.Today)).ReturnsAsync(_powerServiceSuccessResponse);
             _aggregator.Setup(x => x.Aggregate(_trades)).Returns(_aggregateTradesSuccessResponse);
-            _csvCreator.Setup(x => x.CreateReport(_aggregatedTrades, fileLocation)).Returns(_createReportSuccessResponse);
+            _reportService.Setup(x => x.CreateReport(_aggregatedTrades, fileLocation)).Returns(_createReportSuccessResponse);
 
             await _sut.CreateCsvIntraDayReportAsync(fileLocation);
 
@@ -60,7 +65,7 @@ namespace IntraDayApp.Service.Tests
         {
             _powerService.Setup(x => x.GetTradesAsync(DateTime.Today)).ReturnsAsync(_powerServiceSuccessResponse);
             _aggregator.Setup(x => x.Aggregate(_trades)).Returns(_aggregateTradesSuccessResponse);
-            _csvCreator.Setup(x => x.CreateReport(_aggregatedTrades, fileLocation)).Returns(_createReportSuccessResponse);
+            _reportService.Setup(x => x.CreateReport(_aggregatedTrades, fileLocation)).Returns(_createReportSuccessResponse);
 
             await _sut.CreateCsvIntraDayReportAsync(fileLocation);
 
@@ -83,11 +88,11 @@ namespace IntraDayApp.Service.Tests
         {
             _powerService.Setup(x => x.GetTradesAsync(DateTime.Today)).ReturnsAsync(_powerServiceSuccessResponse);
             _aggregator.Setup(x => x.Aggregate(_trades)).Returns(_aggregateTradesSuccessResponse);
-            _csvCreator.Setup(x => x.CreateReport(_aggregatedTrades, It.IsAny<string>())).Returns(_createReportSuccessResponse);
+            _reportService.Setup(x => x.CreateReport(_aggregatedTrades, It.IsAny<string>())).Returns(_createReportSuccessResponse);
 
             await _sut.CreateCsvIntraDayReportAsync(fileLocation);
 
-            _csvCreator.Verify(x => x.CreateReport(_aggregatedTrades, fileLocation), Times.Once());
+            _reportService.Verify(x => x.CreateReport(_aggregatedTrades, fileLocation), Times.Once());
         }
 
         [TestMethod]
@@ -98,7 +103,7 @@ namespace IntraDayApp.Service.Tests
 
             await _sut.CreateCsvIntraDayReportAsync(fileLocation);
 
-            _csvCreator.Verify(x => x.CreateReport(It.IsAny<IEnumerable<AggregatedTradeItem>>(), fileLocation), Times.Never());
+            _reportService.Verify(x => x.CreateReport(It.IsAny<IEnumerable<AggregatedTradeItem>>(), fileLocation), Times.Never());
         }
     }
 }

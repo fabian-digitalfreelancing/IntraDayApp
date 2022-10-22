@@ -1,5 +1,6 @@
 using IntraDayApp;
 using IntraDayApp.Domain.AppSettings;
+using IntraDayApp.Domain.Interfaces.App;
 using IntraDayApp.Remote;
 using IntraDayApp.Service;
 using Microsoft.Extensions.Logging.Configuration;
@@ -17,6 +18,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddPowerServices();
         services.AddServices();
+        services.AddSingleton<TimerWrapper, TimerWrapperImpl>();
         services.AddHostedService<WindowsBackgroundService>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

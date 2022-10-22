@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IntraDayApp.Domain.Interfaces.Remote;
+using Microsoft.Extensions.DependencyInjection;
 using Services;
 
 namespace IntraDayApp.Remote

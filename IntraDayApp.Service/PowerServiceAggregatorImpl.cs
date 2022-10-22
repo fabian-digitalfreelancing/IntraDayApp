@@ -1,4 +1,5 @@
-﻿using IntraDayApp.Domain.Models;
+﻿using IntraDayApp.Domain.Interfaces.Service;
+using IntraDayApp.Domain.Models;
 using IntraDayApp.Domain.Responses;
 using Microsoft.Extensions.Logging;
 
@@ -51,18 +52,12 @@ namespace IntraDayApp.Service
         {
             try
             {
-                if (period == 1)
+                return period switch
                 {
-                    return new TimeOnly(23, 0);
-                }
-                else if (period <= 24)
-                {
-                    return new TimeOnly(period - 2, 0);
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException(nameof(period));
-                }
+                    1 => new TimeOnly(23, 0),
+                    <= 24 => new TimeOnly(period - 2, 0),
+                    _ => throw new ArgumentOutOfRangeException(nameof(period))
+                };
             }
             catch (ArgumentOutOfRangeException ex)
             {
