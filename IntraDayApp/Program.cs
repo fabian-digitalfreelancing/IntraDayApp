@@ -5,6 +5,7 @@ using IntraDayApp.Remote;
 using IntraDayApp.Service;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.EventLog;
+using Serilog;
 
 using IHost host = Host.CreateDefaultBuilder(args)
     .UseWindowsService(options =>
@@ -24,12 +25,12 @@ using IHost host = Host.CreateDefaultBuilder(args)
 
         IConfiguration configuration = hostContext.Configuration;
         services.Configure<ReportSettings>(configuration.GetSection(nameof(ReportSettings)));
+
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
     })
-    .ConfigureLogging((context, logging) =>
-    {
-        logging.AddConfiguration(
-            context.Configuration.GetSection("Logging"));
-    })
+    .UseSerilog()
     .Build();
 
 await host.RunAsync();
