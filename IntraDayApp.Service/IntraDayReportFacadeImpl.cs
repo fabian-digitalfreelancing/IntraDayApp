@@ -28,21 +28,21 @@ namespace IntraDayApp.Service
             var powerTradesResponse = await _powerService.GetTradesAsync(_timeProvider.TodaysDate());
             if (powerTradesResponse.Status != ServiceResponseStatus.Success)
             {
-                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of a Power Trade Service Error ");
+                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of a PowerService error ");
                 return;
             }
 
             var aggregatedTradesResponse = _aggregator.Aggregate(powerTradesResponse.Data);
             if (aggregatedTradesResponse.Status != ServiceResponseStatus.Success)
             {
-                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of a Aggregator Service Error");
+                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of an aggregation error");
                 return;
             }
 
             var reportResponse = _reportService.CreateReport(aggregatedTradesResponse.Data, fileLocation);
             if (reportResponse.Status != ServiceResponseStatus.Success)
             {
-                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of a Csv Creator Error");
+                _logger.LogInformation($"Report creation aborted at {_timeProvider.Now()} because of a file creation error. Please check your ReportSettings settings");
                 return;
             }
 

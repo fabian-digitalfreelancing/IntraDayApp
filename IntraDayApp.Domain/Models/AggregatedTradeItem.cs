@@ -1,7 +1,10 @@
-﻿namespace IntraDayApp.Domain.Models
+﻿using CsvHelper.Configuration.Attributes;
+
+namespace IntraDayApp.Domain.Models
 {
     public class AggregatedTradeItem
     {
+        [Name("Local Time")]
         public TimeOnly LocalTime { get; set; }
         public double Volume { get; set; }
 
